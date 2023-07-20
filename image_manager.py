@@ -46,6 +46,7 @@ class ImageManager():
     def draw_selectors(self):
         self.panel_background = pygame.Surface((300, SCREEN.get_height()))
         self.panel_background.fill((20,20,30))
+        self.panel_rect = pygame.Rect((0, 0), (300, SCREEN.get_height()))
         SCREEN.blit(self.panel_background, (0,0))
         
         for selector in self.selectors:
