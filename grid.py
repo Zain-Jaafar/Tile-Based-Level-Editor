@@ -21,8 +21,6 @@ class Grid:
         self.MOVEMENT_SPEED = 16
         
         self.mouse_presses = []
-
-        
     
     
     def next_layer(self):
@@ -46,6 +44,7 @@ class Grid:
     
     def create_grid(self):
         self.grid_tile_lists.append([])
+        self.tile_metadata_list.append([])
         row_count = 0
         for _ in range(self.row_count):
             column_count = 0
@@ -59,8 +58,8 @@ class Grid:
             row_count += 1
     
     def reset_grid(self):
-        for tile in self.grid_tile_lists:
-            tile.set_image(None)
+        self.grid_tile_lists = []
+        self.create_grid()
     
     def draw_tiles(self):
         for layer in self.grid_tile_lists:
@@ -76,10 +75,10 @@ class Grid:
                 if image_manager.selectors_hidden:
                     if tile.rect.collidepoint(mouse_position):
                         image_path = image_manager.get_selected_image_path()
-                        if [image_path, tile.get_position()] not in self.tile_metadata_list:
-                            if [tile.get_image_path(), tile.get_position()] in self.tile_metadata_list:
-                                self.tile_metadata_list.remove([tile.get_image_path(), tile.get_position()])
-                            self.tile_metadata_list.append([image_path, tile.get_position()])
+                        if [image_path, tile.get_position()] not in self.tile_metadata_list[self.current_layer]:
+                            if [tile.get_image_path(), tile.get_position()] in self.tile_metadata_list[self.current_layer]:
+                                self.tile_metadata_list[self.current_layer].remove([tile.get_image_path(), tile.get_position()])
+                            self.tile_metadata_list[self.current_layer].append([image_path, tile.get_position()])
                     
                         tile.set_image(image_path)
                     
@@ -87,10 +86,10 @@ class Grid:
                 else:
                     if tile.rect.collidepoint(mouse_position) and not tile.rect.colliderect(image_manager.panel_rect):
                         image_path = image_manager.get_selected_image_path()
-                        if [image_path, tile.get_position()] not in self.tile_metadata_list:
-                            if [tile.get_image_path(), tile.get_position()] in self.tile_metadata_list:
-                                self.tile_metadata_list.remove([tile.get_image_path(), tile.get_position()])
-                            self.tile_metadata_list.append([image_path, tile.get_position()])
+                        if [image_path, tile.get_position()] not in self.tile_metadata_list[self.current_layer]:
+                            if [tile.get_image_path(), tile.get_position()] in self.tile_metadata_list[self.current_layer]:
+                                self.tile_metadata_list[self.current_layer].remove([tile.get_image_path(), tile.get_position()])
+                            self.tile_metadata_list[self.current_layer].append([image_path, tile.get_position()])
                     
                         tile.set_image(image_path)
             
@@ -98,7 +97,7 @@ class Grid:
             for tile in self.grid_tile_lists[self.current_layer]:
                 if tile.rect.collidepoint(mouse_position):
                     try:
-                        self.tile_metadata_list.remove([tile.get_image_path(), tile.get_position()])
+                        self.tile_metadata_list[self.current_layer].remove([tile.get_image_path(), tile.get_position()])
                     except ValueError:
                         pass
                     
@@ -135,7 +134,6 @@ class Grid:
     
     def manage_key_presses(self):
         self.get_key_presses()
-        print(self.grid_starting_position)
         if self.keys[pygame.K_UP]:
             self.move_up()
         if self.keys[pygame.K_DOWN]:
@@ -146,19 +144,28 @@ class Grid:
             self.move_right()
         
     def save(self):
+        print(self.tile_metadata_list)
         with open("Levels/level.json", "w") as f:
             json.dump(self.tile_metadata_list, f)
     
     def load(self, file):
         self.reset_grid()
         self.tile_metadata_list.clear()
+        layer_count = 0
         with open(file, "r") as f:
             f = json.load(f)
-            for tile_metadata in f:
-                for grid_tile in self.grid_tile_lists:
-                    if tile_metadata[1] == grid_tile.get_position():
-                        grid_tile.set_image(tile_metadata[0])
-                self.tile_metadata_list.append(tile_metadata)
+            while len(self.grid_tile_lists) != len(f):
+                self.create_grid()
+            for layer in f:
+                print(layer)
+                for tile in layer:
+                    print(tile)
+                    for grid_tile in self.grid_tile_lists[layer_count]:
+                        if tile[1] == grid_tile.get_position():
+                            grid_tile.set_image(tile[0])
+                            print(grid_tile.get_image_path())
+                self.tile_metadata_list.append(layer)
+                layer_count += 1
                 
 
 grid = Grid()
