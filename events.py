@@ -23,5 +23,14 @@ def handle_events(events: pygame.event.Event):
                 else:
                     image_manager.selectors_hidden = True
         
+            if event.key == pygame.K_n:
+                grid.new_layer()
+            
+            elif event.key == pygame.K_o:
+                grid.next_layer()
+            
+            elif event.key == pygame.K_i:
+                grid.previous_layer()
+                
         elif event.type == pygame.DROPFILE:
                 grid.load(event.file)

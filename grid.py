@@ -1,24 +1,43 @@
 import pygame
-from tile import Tile
-from utils import SCREEN
-from image_manager import image_manager
 import json
+from tile import Tile
+from utils import SCREEN, draw_text
+from image_manager import image_manager
 
 class Grid:
     def __init__(self):
         self.tile_size = 48
         self.row_count = 32
         self.column_count = 32
+        self.grid_starting_position = [0, 0]
         
-        self.grid_tile_list = []
+        self.grid_tile_lists = []
         self.tile_metadata_list = []
         self.create_grid()
+        
+        self.current_layer = 0
         
         self.keys = []
         self.MOVEMENT_SPEED = 16
         
         self.mouse_presses = []
+
+        
     
+    
+    def next_layer(self):
+        self.current_layer += 1
+    
+    def previous_layer(self):
+        self.current_layer -= 1
+    
+    def new_layer(self):
+        self.create_grid()
+        self.current_layer = len(self.grid_tile_lists) - 1
+    
+    def display_current_layer(self):
+        draw_text("white", f"Layer: {self.current_layer}", (10, SCREEN.get_height() - 25), 28)
+        
     def get_key_presses(self):
         self.keys = pygame.key.get_pressed()
     
@@ -26,32 +45,34 @@ class Grid:
         self.mouse_presses = pygame.mouse.get_pressed()
     
     def create_grid(self):
+        self.grid_tile_lists.append([])
         row_count = 0
         for _ in range(self.row_count):
             column_count = 0
             for _ in range(self.column_count):
                 image_path = None
-                rect = pygame.Rect((self.tile_size * column_count, self.tile_size * row_count), (self.tile_size, self.tile_size))
+                rect = pygame.Rect((self.grid_starting_position[0] + self.tile_size * column_count, self.grid_starting_position[1] + self.tile_size * row_count), (self.tile_size, self.tile_size))
                 tile = Tile(image_path, rect)
-                self.grid_tile_list.append(tile)
+                self.grid_tile_lists[len(self.grid_tile_lists) - 1].append(tile)
                 
                 column_count += 1
             row_count += 1
     
     def reset_grid(self):
-        for tile in self.grid_tile_list:
+        for tile in self.grid_tile_lists:
             tile.set_image(None)
     
     def draw_tiles(self):
-        for tile in self.grid_tile_list:
-            tile.draw()
+        for layer in self.grid_tile_lists:
+            for tile in layer:
+                tile.draw()
 
     def on_clicked(self):
         self.get_mouse_presses()
         mouse_position = pygame.mouse.get_pos()
         
         if self.mouse_presses[0]:
-            for tile in self.grid_tile_list:
+            for tile in self.grid_tile_lists[self.current_layer]:
                 if image_manager.selectors_hidden:
                     if tile.rect.collidepoint(mouse_position):
                         image_path = image_manager.get_selected_image_path()
@@ -74,7 +95,7 @@ class Grid:
                         tile.set_image(image_path)
             
         elif self.mouse_presses[2]:
-            for tile in self.grid_tile_list:
+            for tile in self.grid_tile_lists[self.current_layer]:
                 if tile.rect.collidepoint(mouse_position):
                     try:
                         self.tile_metadata_list.remove([tile.get_image_path(), tile.get_position()])
@@ -85,23 +106,36 @@ class Grid:
                     tile.set_image(image_path)
     
     def move_left(self):
-        for tile in self.grid_tile_list:
-            tile.rect.x += self.MOVEMENT_SPEED
+        self.grid_starting_position[0] += self.MOVEMENT_SPEED
+        for layer in self.grid_tile_lists:
+            for tile in layer:
+                tile.rect.x += self.MOVEMENT_SPEED
+                
     
     def move_right(self):
-        for tile in self.grid_tile_list:
-            tile.rect.x -= self.MOVEMENT_SPEED
+        self.grid_starting_position[0] -= self.MOVEMENT_SPEED # CHANGE EVERYTHING LIKE THIS
+        for layer in self.grid_tile_lists:
+            for tile in layer:
+                tile.rect.x -= self.MOVEMENT_SPEED
+                
     
     def move_up(self):
-        for tile in self.grid_tile_list:
-            tile.rect.y += self.MOVEMENT_SPEED
+        self.grid_starting_position[1] += self.MOVEMENT_SPEED
+        for layer in self.grid_tile_lists:
+            for tile in layer:
+                tile.rect.y += self.MOVEMENT_SPEED
+                
     
     def move_down(self):
-        for tile in self.grid_tile_list:
-            tile.rect.y -= self.MOVEMENT_SPEED
+        self.grid_starting_position[1] -= self.MOVEMENT_SPEED
+        for grid in self.grid_tile_lists:
+            for tile in grid:
+                tile.rect.y -= self.MOVEMENT_SPEED
+                
     
     def manage_key_presses(self):
         self.get_key_presses()
+        print(self.grid_starting_position)
         if self.keys[pygame.K_UP]:
             self.move_up()
         if self.keys[pygame.K_DOWN]:
@@ -121,7 +155,7 @@ class Grid:
         with open(file, "r") as f:
             f = json.load(f)
             for tile_metadata in f:
-                for grid_tile in self.grid_tile_list:
+                for grid_tile in self.grid_tile_lists:
                     if tile_metadata[1] == grid_tile.get_position():
                         grid_tile.set_image(tile_metadata[0])
                 self.tile_metadata_list.append(tile_metadata)

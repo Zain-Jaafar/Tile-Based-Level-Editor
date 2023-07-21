@@ -11,8 +11,11 @@ while True:
     grid.draw_tiles()
     grid.manage_key_presses()
     grid.on_clicked()
+    
     if image_manager.selectors_hidden is False:
         image_manager.draw_selectors()
+    
+    grid.display_current_layer()
     
     pygame.display.update()
     clock.tick(FPS)
