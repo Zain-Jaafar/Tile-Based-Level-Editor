@@ -54,6 +54,8 @@ class Grid:
                 tile = Tile(image_path, rect)
                 self.grid_tile_lists[len(self.grid_tile_lists) - 1].append(tile)
                 
+                print(self.grid_starting_position, self.grid_starting_position[0] + self.tile_size * column_count, self.grid_starting_position[1] + self.tile_size * row_count)
+
                 column_count += 1
             row_count += 1
     
@@ -74,6 +76,7 @@ class Grid:
             for tile in self.grid_tile_lists[self.current_layer]:
                 if image_manager.selectors_hidden:
                     if tile.rect.collidepoint(mouse_position):
+                        print(tile.get_position())
                         image_path = image_manager.get_selected_image_path()
                         if [image_path, tile.get_position()] not in self.tile_metadata_list[self.current_layer]:
                             if [tile.get_image_path(), tile.get_position()] in self.tile_metadata_list[self.current_layer]:
@@ -86,6 +89,7 @@ class Grid:
                 else:
                     if tile.rect.collidepoint(mouse_position) and not tile.rect.colliderect(image_manager.panel_rect):
                         image_path = image_manager.get_selected_image_path()
+                        print(tile.get_position())
                         if [image_path, tile.get_position()] not in self.tile_metadata_list[self.current_layer]:
                             if [tile.get_image_path(), tile.get_position()] in self.tile_metadata_list[self.current_layer]:
                                 self.tile_metadata_list[self.current_layer].remove([tile.get_image_path(), tile.get_position()])
@@ -159,9 +163,9 @@ class Grid:
             for layer in f:
                 print(layer)
                 for tile in layer:
-                    print(tile)
                     for grid_tile in self.grid_tile_lists[layer_count]:
                         if tile[1] == grid_tile.get_position():
+                            print(tile, layer_count)
                             grid_tile.set_image(tile[0])
                             print(grid_tile.get_image_path())
                 self.tile_metadata_list.append(layer)
