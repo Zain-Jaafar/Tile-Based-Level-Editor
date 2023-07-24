@@ -2,12 +2,13 @@ import pygame
 from utils import SCREEN
 
 class Tile():
-    def __init__(self, image_path: str, rect: pygame.Rect, position: list[int, int]):
+    def __init__(self, image_path: str, rect: pygame.Rect, position: list[int, int], layer_number: int):
         self.image = None
         self.image_path = image_path
         self.set_image(image_path)
         self.rect = rect
         self.position = position
+        self.layer_number = layer_number
     
     def set_image(self, image_path):
         if image_path is None:
@@ -25,7 +26,10 @@ class Tile():
     
     def draw(self):
         if self.image is None:
-            pygame.draw.rect(SCREEN, (40, 40, 40), self.rect, 1)
+            if self.layer_number == 1:
+                pygame.draw.rect(SCREEN, (40, 40, 40), self.rect, 1)
+            else:
+                pass
         else:
             SCREEN.blit(self.image, self.rect)
         

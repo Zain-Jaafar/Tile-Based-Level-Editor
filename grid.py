@@ -45,6 +45,9 @@ class Grid:
     def create_grid(self):
         self.grid_tile_lists.append([])
         self.tile_metadata_list.append([])
+
+        layer_number = len(self.grid_tile_lists)
+
         row_count = 0
         for _ in range(self.row_count):
             column_count = 0
@@ -52,7 +55,7 @@ class Grid:
                 image_path = None
                 rect = pygame.Rect((self.grid_starting_position[0] + self.tile_size * column_count, self.grid_starting_position[1] + self.tile_size * row_count), (self.tile_size, self.tile_size))
                 position = [self.tile_size * column_count, self.tile_size * row_count]
-                tile = Tile(image_path, rect, position)
+                tile = Tile(image_path, rect, position, layer_number)
                 self.grid_tile_lists[len(self.grid_tile_lists) - 1].append(tile)
 
                 column_count += 1
