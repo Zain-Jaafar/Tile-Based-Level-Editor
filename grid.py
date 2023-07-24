@@ -54,8 +54,6 @@ class Grid:
                 position = [self.tile_size * column_count, self.tile_size * row_count]
                 tile = Tile(image_path, rect, position)
                 self.grid_tile_lists[len(self.grid_tile_lists) - 1].append(tile)
-                
-                print(self.grid_starting_position, self.grid_starting_position[0] + self.tile_size * column_count, self.grid_starting_position[1] + self.tile_size * row_count)
 
                 column_count += 1
             row_count += 1
@@ -149,7 +147,6 @@ class Grid:
             self.move_right()
         
     def save(self):
-        print(self.tile_metadata_list)
         with open("Levels/level.json", "w") as f:
             json.dump(self.tile_metadata_list, f)
     
@@ -162,13 +159,10 @@ class Grid:
             while len(self.grid_tile_lists) != len(f):
                 self.create_grid()
             for layer in f:
-                print(layer)
                 for tile in layer:
                     for grid_tile in self.grid_tile_lists[layer_count]:
                         if tile[1] == grid_tile.get_position():
-                            print(tile, layer_count)
                             grid_tile.set_image(tile[0])
-                            print(grid_tile.get_image_path())
                 self.tile_metadata_list.append(layer)
                 layer_count += 1
                 
