@@ -2,12 +2,12 @@ import pygame
 from utils import SCREEN
 
 class Tile():
-    def __init__(self, image_path: str, rect: pygame.Rect):
+    def __init__(self, image_path: str, rect: pygame.Rect, position: list[int, int]):
         self.image = None
         self.image_path = image_path
         self.set_image(image_path)
         self.rect = rect
-        self.position = [rect.x, rect.y]
+        self.position = position
     
     def set_image(self, image_path):
         if image_path is None:

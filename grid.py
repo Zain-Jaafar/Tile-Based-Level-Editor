@@ -51,7 +51,8 @@ class Grid:
             for _ in range(self.column_count):
                 image_path = None
                 rect = pygame.Rect((self.grid_starting_position[0] + self.tile_size * column_count, self.grid_starting_position[1] + self.tile_size * row_count), (self.tile_size, self.tile_size))
-                tile = Tile(image_path, rect)
+                position = [self.tile_size * column_count, self.tile_size * row_count]
+                tile = Tile(image_path, rect, position)
                 self.grid_tile_lists[len(self.grid_tile_lists) - 1].append(tile)
                 
                 print(self.grid_starting_position, self.grid_starting_position[0] + self.tile_size * column_count, self.grid_starting_position[1] + self.tile_size * row_count)
