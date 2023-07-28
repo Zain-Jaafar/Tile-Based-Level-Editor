@@ -20,11 +20,11 @@ Press N for a new layer <br>
 Press O to go to the next layer <br>
 Press I to go to the previous layer <br>
 Press LEFT CTRL + S to save <br>
-Open save files by viewing it in the file explorer, and then dragging it onto the editors' window <br>
+Open save files by viewing them in the file explorer, and then dragging them onto the level editors' window <br>
 
 ### Devlog Youtube Series
-[Episode 1](https://www.youtube.com/watch?v=R91IBF7gNwA)
-Episodes 2 and 3 coming soon!
+[Episode 1](https://www.youtube.com/watch?v=R91IBF7gNwA) <br>
+Episodes 2 and 3 coming soon! <br>
 
 ### IMPORTANT
 You need a Images/Tiles/ folder in the codes' directory. <br>
