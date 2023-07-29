@@ -12,18 +12,34 @@ def handle_events(events: pygame.event.Event):
         
         elif event.type == pygame.MOUSEBUTTONDOWN:
             image_manager.onclicked(event.button, event.pos)
+
+            
+
+            if grid.current_tool == "select":
+                
+                grid.select_box_starting_position = event.pos
+
+                print(grid.select_box_starting_position)
+                grid.selecting = True
+        
+        elif event.type == pygame.MOUSEBUTTONUP:
+            if grid.current_tool == "select":
+                grid.select_box_ending_position = event.pos
+                print(grid.select_box_ending_position)
+                grid.selecting = False
+                grid.create_select_box()
     
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_s and pygame.key.get_mods() & pygame.KMOD_CTRL:
                 grid.save()
             
-            if event.key == pygame.K_h:
+            elif event.key == pygame.K_h:
                 if image_manager.selectors_hidden:
                     image_manager.selectors_hidden = False
                 else:
                     image_manager.selectors_hidden = True
         
-            if event.key == pygame.K_n:
+            elif event.key == pygame.K_n:
                 grid.new_layer()
             
             elif event.key == pygame.K_o:
@@ -31,6 +47,12 @@ def handle_events(events: pygame.event.Event):
             
             elif event.key == pygame.K_i:
                 grid.previous_layer()
+            
+            elif event.key == pygame.K_1:
+                grid.current_tool = "brush"
+            
+            elif event.key == pygame.K_2:
+                grid.current_tool = "select"
                 
         elif event.type == pygame.DROPFILE:
                 grid.load(event.file)

@@ -21,6 +21,12 @@ class Grid:
         self.MOVEMENT_SPEED = 16
         
         self.mouse_presses = []
+
+        self.current_tool = "brush"
+
+        self.select_box_starting_position = (0, 0)
+        self.select_box_ending_position = (0, 0)
+        self.select_box = pygame.Rect(0, 0, 0, 0)
     
     
     def next_layer(self):
@@ -70,45 +76,59 @@ class Grid:
             for tile in layer:
                 tile.draw()
 
+    def create_select_box(self):
+        self.select_box = pygame.Rect(0, 0, 0, 0)
+        x1, y1 = min(self.select_box_starting_position[0], self.select_box_ending_position[0]), min(self.select_box_starting_position[1], self.select_box_ending_position[1])
+        x2, y2 = max(self.select_box_starting_position[0], self.select_box_ending_position[0]), max(self.select_box_starting_position[1], self.select_box_ending_position[1])
+        
+        self.select_box = pygame.Rect(x1, y1, x2-x1, y2-y1)
+        
+
+    def draw_select_box(self):
+        pygame.draw.rect(SCREEN, "white", self.select_box, 2)
+
     def on_clicked(self):
         self.get_mouse_presses()
         mouse_position = pygame.mouse.get_pos()
         
-        if self.mouse_presses[0]:
-            for tile in self.grid_tile_lists[self.current_layer]:
-                if image_manager.selectors_hidden:
-                    if tile.rect.collidepoint(mouse_position):
-                        print(tile.get_position())
-                        image_path = image_manager.get_selected_image_path()
-                        if [image_path, tile.get_position()] not in self.tile_metadata_list[self.current_layer]:
-                            if [tile.get_image_path(), tile.get_position()] in self.tile_metadata_list[self.current_layer]:
-                                self.tile_metadata_list[self.current_layer].remove([tile.get_image_path(), tile.get_position()])
-                            self.tile_metadata_list[self.current_layer].append([image_path, tile.get_position()])
+        if self.current_tool == "brush":
+            if self.mouse_presses[0]:
+                for tile in self.grid_tile_lists[self.current_layer]:
+                    if image_manager.selectors_hidden:
+                        if tile.rect.collidepoint(mouse_position):
+                            image_path = image_manager.get_selected_image_path()
+                            if [image_path, tile.get_position()] not in self.tile_metadata_list[self.current_layer]:
+                                if [tile.get_image_path(), tile.get_position()] in self.tile_metadata_list[self.current_layer]:
+                                    self.tile_metadata_list[self.current_layer].remove([tile.get_image_path(), tile.get_position()])
+                                self.tile_metadata_list[self.current_layer].append([image_path, tile.get_position()])
+                        
+                            tile.set_image(image_path)
+                        
                     
-                        tile.set_image(image_path)
-                    
-                
-                else:
-                    if tile.rect.collidepoint(mouse_position) and not tile.rect.colliderect(image_manager.panel_rect):
-                        image_path = image_manager.get_selected_image_path()
-                        print(tile.get_position())
-                        if [image_path, tile.get_position()] not in self.tile_metadata_list[self.current_layer]:
-                            if [tile.get_image_path(), tile.get_position()] in self.tile_metadata_list[self.current_layer]:
-                                self.tile_metadata_list[self.current_layer].remove([tile.get_image_path(), tile.get_position()])
-                            self.tile_metadata_list[self.current_layer].append([image_path, tile.get_position()])
-                    
-                        tile.set_image(image_path)
+                    else:
+                        if tile.rect.collidepoint(mouse_position) and not tile.rect.colliderect(image_manager.panel_rect):
+                            image_path = image_manager.get_selected_image_path()
+                            if [image_path, tile.get_position()] not in self.tile_metadata_list[self.current_layer]:
+                                if [tile.get_image_path(), tile.get_position()] in self.tile_metadata_list[self.current_layer]:
+                                    self.tile_metadata_list[self.current_layer].remove([tile.get_image_path(), tile.get_position()])
+                                self.tile_metadata_list[self.current_layer].append([image_path, tile.get_position()])
+                        
+                            tile.set_image(image_path)
             
-        elif self.mouse_presses[2]:
-            for tile in self.grid_tile_lists[self.current_layer]:
-                if tile.rect.collidepoint(mouse_position):
-                    try:
-                        self.tile_metadata_list[self.current_layer].remove([tile.get_image_path(), tile.get_position()])
-                    except ValueError:
-                        pass
-                    
-                    image_path = None
-                    tile.set_image(image_path)
+            elif self.mouse_presses[2]:
+                for tile in self.grid_tile_lists[self.current_layer]:
+                    if tile.rect.collidepoint(mouse_position):
+                        try:
+                            self.tile_metadata_list[self.current_layer].remove([tile.get_image_path(), tile.get_position()])
+                        except ValueError:
+                            pass
+                        
+                        image_path = None
+                        tile.set_image(image_path)
+        
+        elif self.current_tool == "select":
+            self.draw_select_box()
+            
     
     def move_left(self):
         self.grid_starting_position[0] += self.MOVEMENT_SPEED
@@ -118,7 +138,7 @@ class Grid:
                 
     
     def move_right(self):
-        self.grid_starting_position[0] -= self.MOVEMENT_SPEED # CHANGE EVERYTHING LIKE THIS
+        self.grid_starting_position[0] -= self.MOVEMENT_SPEED
         for layer in self.grid_tile_lists:
             for tile in layer:
                 tile.rect.x -= self.MOVEMENT_SPEED
