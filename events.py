@@ -20,13 +20,11 @@ def handle_events(events: pygame.event.Event):
                 grid.select_box_starting_position = event.pos
 
                 print(grid.select_box_starting_position)
-                grid.selecting = True
         
         elif event.type == pygame.MOUSEBUTTONUP:
             if grid.current_tool == "select":
                 grid.select_box_ending_position = event.pos
                 print(grid.select_box_ending_position)
-                grid.selecting = False
                 grid.create_select_box()
     
         elif event.type == pygame.KEYDOWN:
