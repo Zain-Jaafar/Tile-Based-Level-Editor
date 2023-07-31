@@ -95,6 +95,14 @@ class Grid:
             if self.select_box.colliderect(tile.rect):
                 self.selected_tiles.append(tile)
 
+    def fill_selected_tiles(self):
+        for tile in self.selected_tiles:
+            tile.set_image(image_manager.selected_image_path)
+    
+    def delete_selected_tiles(self):
+        for tile in self.selected_tiles:
+            tile.set_image(None)
+
     def on_clicked(self):
         self.get_mouse_presses()
         mouse_position = pygame.mouse.get_pos()

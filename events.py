@@ -16,9 +16,7 @@ def handle_events(events: pygame.event.Event):
             
 
             if grid.current_tool == "select":
-                
                 grid.select_box_starting_position = event.pos
-
                 print(grid.select_box_starting_position)
         
         elif event.type == pygame.MOUSEBUTTONUP:
@@ -45,6 +43,12 @@ def handle_events(events: pygame.event.Event):
             
             elif event.key == pygame.K_i:
                 grid.previous_layer()
+            
+            elif event.key == pygame.K_f:
+                grid.fill_selected_tiles()
+            
+            elif event.key == pygame.K_d:
+                grid.delete_selected_tiles()
             
             elif event.key == pygame.K_1:
                 grid.current_tool = "brush"
