@@ -27,7 +27,7 @@ class Grid:
         self.select_box_starting_position = (0, 0)
         self.select_box_ending_position = (0, 0)
         self.select_box = pygame.Rect(0, 0, 0, 0)
-    
+        self.selected_tiles = []
     
     def next_layer(self):
         self.current_layer += 1
@@ -82,10 +82,18 @@ class Grid:
         x2, y2 = max(self.select_box_starting_position[0], self.select_box_ending_position[0]), max(self.select_box_starting_position[1], self.select_box_ending_position[1])
         
         self.select_box = pygame.Rect(x1, y1, x2-x1, y2-y1)
+        self.set_selected_tiles()
+        print(self.selected_tiles)
         
 
     def draw_select_box(self):
         pygame.draw.rect(SCREEN, "white", self.select_box, 2)
+
+    def set_selected_tiles(self):
+        self.selected_tiles.clear()
+        for tile in self.grid_tile_lists[self.current_layer]:
+            if self.select_box.colliderect(tile.rect):
+                self.selected_tiles.append(tile)
 
     def on_clicked(self):
         self.get_mouse_presses()
