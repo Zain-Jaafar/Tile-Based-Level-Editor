@@ -4,7 +4,6 @@ This is a Tile Based Level Editor I'm working on.
 ![level editor](https://github.com/Zain-Jaafar/Tile-Based-Level-Editor/assets/83691224/6db24ad1-ac42-4f1e-b0a2-bef8555efb72)
 
 ### TODO
-Auto-tiling Functionality (select an area and it automatically uses the correct images for tiles) <br>
 Bug Fixes <br>
 More to come as I get more ideas and suggestions
 

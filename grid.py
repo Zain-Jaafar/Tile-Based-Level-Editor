@@ -28,6 +28,8 @@ class Grid:
         self.select_box_ending_position = (0, 0)
         self.select_box = pygame.Rect(0, 0, 0, 0)
         self.selected_tiles = []
+
+        self.selected_image_tiles = []
     
     def next_layer(self):
         self.current_layer += 1
@@ -83,7 +85,6 @@ class Grid:
         
         self.select_box = pygame.Rect(x1, y1, x2-x1, y2-y1)
         self.set_selected_tiles()
-        print(self.selected_tiles)
         
 
     def draw_select_box(self):
@@ -91,9 +92,12 @@ class Grid:
 
     def set_selected_tiles(self):
         self.selected_tiles.clear()
+        self.selected_image_tiles.clear()
         for tile in self.grid_tile_lists[self.current_layer]:
             if self.select_box.colliderect(tile.rect):
                 self.selected_tiles.append(tile)
+                if tile.image is not None:
+                    self.selected_image_tiles.append(tile)
 
     def fill_selected_tiles(self):
         for tile in self.selected_tiles:
@@ -102,6 +106,36 @@ class Grid:
     def delete_selected_tiles(self):
         for tile in self.selected_tiles:
             tile.set_image(None)
+
+    def autotile_selected_tiles(self):
+        if self.selected_image_tiles == []:
+            return
+        
+        for tile in self.selected_image_tiles:
+            surrounding_tiles = []
+            for grid_tile in self.selected_tiles:
+                if tile.autotiling_rect.colliderect(grid_tile):
+                    if grid_tile != tile:
+                        surrounding_tiles.append(grid_tile)
+            
+            if surrounding_tiles[1].image is None and surrounding_tiles[3].image is not None and surrounding_tiles[4].image is not None:
+                tile.set_image(f"Images/Tiles/{image_manager.selected_image_folder}/top_middle.png")
+
+            elif surrounding_tiles[1].image is None and surrounding_tiles[3].image is None and surrounding_tiles[4].image is not None:
+                tile.set_image(f"Images/Tiles/{image_manager.selected_image_folder}/top_left.png")
+            
+            elif surrounding_tiles[1].image is None and surrounding_tiles[3].image is not None and surrounding_tiles[4].image is None:
+                tile.set_image(f"Images/Tiles/{image_manager.selected_image_folder}/top_right.png")
+            
+            elif surrounding_tiles[3].image is None and surrounding_tiles[4].image is not None:
+                tile.set_image(f"Images/Tiles/{image_manager.selected_image_folder}/middle_left.png")
+            
+            elif surrounding_tiles[3].image is not None and surrounding_tiles[4].image is None:
+                tile.set_image(f"Images/Tiles/{image_manager.selected_image_folder}/middle_right.png")
+            
+            else:
+                tile.set_image(f"Images/Tiles/{image_manager.selected_image_folder}/filler.png")
+            
 
     def on_clicked(self):
         self.get_mouse_presses()
@@ -151,6 +185,7 @@ class Grid:
         for layer in self.grid_tile_lists:
             for tile in layer:
                 tile.rect.x += self.MOVEMENT_SPEED
+                tile.autotiling_rect.x += self.MOVEMENT_SPEED
                 
     
     def move_right(self):
@@ -158,6 +193,7 @@ class Grid:
         for layer in self.grid_tile_lists:
             for tile in layer:
                 tile.rect.x -= self.MOVEMENT_SPEED
+                tile.autotiling_rect.x -= self.MOVEMENT_SPEED
                 
     
     def move_up(self):
@@ -165,6 +201,7 @@ class Grid:
         for layer in self.grid_tile_lists:
             for tile in layer:
                 tile.rect.y += self.MOVEMENT_SPEED
+                tile.autotiling_rect.y += self.MOVEMENT_SPEED
                 
     
     def move_down(self):
@@ -172,6 +209,7 @@ class Grid:
         for grid in self.grid_tile_lists:
             for tile in grid:
                 tile.rect.y -= self.MOVEMENT_SPEED
+                tile.autotiling_rect.y -= self.MOVEMENT_SPEED
                 
     
     def manage_key_presses(self):

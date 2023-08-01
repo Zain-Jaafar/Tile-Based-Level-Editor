@@ -22,6 +22,7 @@ class ImageManager():
         self.create_selectors()
         
         self.selected_image_path = None
+        self.selected_image_folder = None
         
         self.selectors_hidden = False
     
@@ -57,15 +58,14 @@ class ImageManager():
     
     def get_selected_image_path(self):
         return self.selected_image_path
-
-    def set_selected_image_path(self, new_path: str):
-        self.selected_image_path = new_path
         
     def onclicked(self, mouse_button, mouse_position):
         if mouse_button == 1:
             for selector in self.selectors:
                 if selector.rect.collidepoint(mouse_position) and self.selectors_hidden is False:
                     self.selected_image_path = selector.get_image_path()
+                    temp_string = selector.get_image_path()[13:]
+                    self.selected_image_folder = temp_string[:temp_string.index("/")]
 
 
 image_manager = ImageManager()

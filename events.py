@@ -50,6 +50,9 @@ def handle_events(events: pygame.event.Event):
             elif event.key == pygame.K_d:
                 grid.delete_selected_tiles()
             
+            elif event.key == pygame.K_a:
+                grid.autotile_selected_tiles()
+            
             elif event.key == pygame.K_1:
                 grid.current_tool = "brush"
             

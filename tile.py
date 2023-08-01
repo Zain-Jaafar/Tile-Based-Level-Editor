@@ -9,6 +9,7 @@ class Tile():
         self.rect = rect
         self.position = position
         self.layer_number = layer_number
+        self.autotiling_rect = pygame.Rect(rect.x - 5, rect.y - 5, rect.width + 10, rect.height + 10)
     
     def set_image(self, image_path):
         if image_path is None:
@@ -28,8 +29,6 @@ class Tile():
         if self.image is None:
             if self.layer_number == 1:
                 pygame.draw.rect(SCREEN, (40, 40, 40), self.rect, 1)
-            else:
-                pass
         else:
             SCREEN.blit(self.image, self.rect)
         
