@@ -17,12 +17,10 @@ def handle_events(events: pygame.event.Event):
 
             if grid.current_tool == "select":
                 grid.select_box_starting_position = event.pos
-                print(grid.select_box_starting_position)
         
         elif event.type == pygame.MOUSEBUTTONUP:
             if grid.current_tool == "select":
                 grid.select_box_ending_position = event.pos
-                print(grid.select_box_ending_position)
                 grid.create_select_box()
     
         elif event.type == pygame.KEYDOWN:

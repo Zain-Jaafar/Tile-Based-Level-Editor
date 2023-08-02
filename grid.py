@@ -45,7 +45,6 @@ class Grid:
         draw_text("white", f"Tool:  {self.current_tool}", (175, SCREEN.get_height() - 25), 28)
 
     def display_current_layer(self):
-        print(self.tile_metadata_list)
         draw_text("white", f"Layer:  {self.current_layer}", (10, SCREEN.get_height() - 25), 28)
         
     def get_key_presses(self):
