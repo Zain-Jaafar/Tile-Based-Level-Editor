@@ -104,11 +104,24 @@ class Grid:
 
     def fill_selected_tiles(self):
         for tile in self.selected_tiles:
-            tile.set_image(image_manager.selected_image_path)
+            image_path = image_manager.selected_image_path
+            if [image_path, tile.get_position()] not in self.tile_metadata_list[self.current_layer]:
+                if [tile.get_image_path(), tile.get_position()] in self.tile_metadata_list[self.current_layer]:
+                    self.tile_metadata_list[self.current_layer].remove([tile.get_image_path(), tile.get_position()])
+                self.tile_metadata_list[self.current_layer].append([image_path, tile.get_position()])
+        
+            tile.set_image(image_path)
     
     def delete_selected_tiles(self):
         for tile in self.selected_tiles:
             tile.set_image(None)
+            try:
+                self.tile_metadata_list[self.current_layer].remove([tile.get_image_path(), tile.get_position()])
+            except ValueError:
+                pass
+            
+            image_path = None
+            tile.set_image(image_path)
 
     def autotile_selected_tiles(self):
         if self.selected_image_tiles == []:
