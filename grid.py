@@ -41,8 +41,11 @@ class Grid:
         self.create_grid()
         self.current_layer = len(self.grid_tile_lists) - 1
     
+    def display_current_tool(self):
+        draw_text("white", f"Tool:  {self.current_tool}", (175, SCREEN.get_height() - 25), 28)
+
     def display_current_layer(self):
-        draw_text("white", f"Layer: {self.current_layer}", (10, SCREEN.get_height() - 25), 28)
+        draw_text("white", f"Layer:  {self.current_layer}", (10, SCREEN.get_height() - 25), 28)
         
     def get_key_presses(self):
         self.keys = pygame.key.get_pressed()

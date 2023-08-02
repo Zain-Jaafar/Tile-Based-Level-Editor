@@ -16,6 +16,7 @@ while True:
         image_manager.draw_selectors()
     
     grid.display_current_layer()
+    grid.display_current_tool()
     
     pygame.display.update()
     clock.tick(FPS)
