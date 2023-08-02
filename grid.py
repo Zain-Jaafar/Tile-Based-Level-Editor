@@ -7,8 +7,8 @@ from image_manager import image_manager
 class Grid:
     def __init__(self):
         self.tile_size = 48
-        self.row_count = 32
-        self.column_count = 32
+        self.row_count = 100
+        self.column_count = 100
         self.grid_starting_position = [0, 0]
         
         self.grid_tile_lists = []
