@@ -4,8 +4,9 @@ This is a Tile Based Level Editor I'm working on.
 ![level editor](https://github.com/Zain-Jaafar/Tile-Based-Level-Editor/assets/83691224/6db24ad1-ac42-4f1e-b0a2-bef8555efb72)
 
 ### TODO
-Bug Fixes <br>
-More to come as I get more ideas and suggestions
+Particle effects <br>
+Screen shake <br>
+Bloom shaders <br>
 
 ### Controls
 Press H to show/hide the side panel <br>
