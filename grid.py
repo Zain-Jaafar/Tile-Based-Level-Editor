@@ -134,23 +134,58 @@ class Grid:
                         surrounding_tiles.append(grid_tile)
             
             if surrounding_tiles[1].image is None and surrounding_tiles[3].image is not None and surrounding_tiles[4].image is not None:
-                tile.set_image(f"Images/Tiles/{image_manager.selected_image_folder}/top_middle.png")
+                image_path = f"Images/Tiles/{image_manager.selected_image_folder}/top_middle.png"
+                if [image_path, tile.get_position()] not in self.tile_metadata_list[self.current_layer]:
+                    if [tile.get_image_path(), tile.get_position()] in self.tile_metadata_list[self.current_layer]:
+                        self.tile_metadata_list[self.current_layer].remove([tile.get_image_path(), tile.get_position()])
+                    self.tile_metadata_list[self.current_layer].append([image_path, tile.get_position()])
+            
+                tile.set_image(image_path)
 
             elif surrounding_tiles[1].image is None and surrounding_tiles[3].image is None and surrounding_tiles[4].image is not None:
-                tile.set_image(f"Images/Tiles/{image_manager.selected_image_folder}/top_left.png")
+                image_path = f"Images/Tiles/{image_manager.selected_image_folder}/top_left.png"
+                if [image_path, tile.get_position()] not in self.tile_metadata_list[self.current_layer]:
+                    if [tile.get_image_path(), tile.get_position()] in self.tile_metadata_list[self.current_layer]:
+                        self.tile_metadata_list[self.current_layer].remove([tile.get_image_path(), tile.get_position()])
+                    self.tile_metadata_list[self.current_layer].append([image_path, tile.get_position()])
+            
+                tile.set_image(image_path)
             
             elif surrounding_tiles[1].image is None and surrounding_tiles[3].image is not None and surrounding_tiles[4].image is None:
-                tile.set_image(f"Images/Tiles/{image_manager.selected_image_folder}/top_right.png")
+                image_path = f"Images/Tiles/{image_manager.selected_image_folder}/top_right.png"
+                if [image_path, tile.get_position()] not in self.tile_metadata_list[self.current_layer]:
+                    if [tile.get_image_path(), tile.get_position()] in self.tile_metadata_list[self.current_layer]:
+                        self.tile_metadata_list[self.current_layer].remove([tile.get_image_path(), tile.get_position()])
+                    self.tile_metadata_list[self.current_layer].append([image_path, tile.get_position()])
+            
+                tile.set_image(image_path)
             
             elif surrounding_tiles[3].image is None and surrounding_tiles[4].image is not None:
-                tile.set_image(f"Images/Tiles/{image_manager.selected_image_folder}/middle_left.png")
+                image_path = f"Images/Tiles/{image_manager.selected_image_folder}/middle_left.png"
+                if [image_path, tile.get_position()] not in self.tile_metadata_list[self.current_layer]:
+                    if [tile.get_image_path(), tile.get_position()] in self.tile_metadata_list[self.current_layer]:
+                        self.tile_metadata_list[self.current_layer].remove([tile.get_image_path(), tile.get_position()])
+                    self.tile_metadata_list[self.current_layer].append([image_path, tile.get_position()])
+            
+                tile.set_image(image_path)
             
             elif surrounding_tiles[3].image is not None and surrounding_tiles[4].image is None:
-                tile.set_image(f"Images/Tiles/{image_manager.selected_image_folder}/middle_right.png")
+                image_path = f"Images/Tiles/{image_manager.selected_image_folder}/middle_right.png"
+                if [image_path, tile.get_position()] not in self.tile_metadata_list[self.current_layer]:
+                    if [tile.get_image_path(), tile.get_position()] in self.tile_metadata_list[self.current_layer]:
+                        self.tile_metadata_list[self.current_layer].remove([tile.get_image_path(), tile.get_position()])
+                    self.tile_metadata_list[self.current_layer].append([image_path, tile.get_position()])
+            
+                tile.set_image(image_path)
             
             else:
-                tile.set_image(f"Images/Tiles/{image_manager.selected_image_folder}/filler.png")
+                image_path = f"Images/Tiles/{image_manager.selected_image_folder}/filler.png"
+                if [image_path, tile.get_position()] not in self.tile_metadata_list[self.current_layer]:
+                    if [tile.get_image_path(), tile.get_position()] in self.tile_metadata_list[self.current_layer]:
+                        self.tile_metadata_list[self.current_layer].remove([tile.get_image_path(), tile.get_position()])
+                    self.tile_metadata_list[self.current_layer].append([image_path, tile.get_position()])
             
+                tile.set_image(image_path)
 
     def on_clicked(self):
         self.get_mouse_presses()
